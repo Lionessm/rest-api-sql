@@ -77,5 +77,15 @@ module.exports = (sequelize) => {
     }
   }, { sequelize });
 
+  User.associate = (models) => {
+    // TODO Add associations.
+    User.hasMany(models.Course, {
+      foreignKey: {
+        fieldName: 'id',
+        allowNull: false,
+      },
+    });
+  };
+
   return User;
 };
