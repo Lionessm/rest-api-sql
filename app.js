@@ -1,6 +1,7 @@
 'use strict';
 
 const { Sequelize } = require('sequelize');
+const { sequelize } = require('./models');
 
 // load modules
 const express = require('express');
@@ -15,13 +16,16 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-// test db authentication
-try {
-  await sequelize.authenticate();
-  console.log('Connection has been established successfully.');
-} catch (error) {
-  console.error('Unable to connect to the database:', error);
-}
+// Test the database connection.
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
+
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
