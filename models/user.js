@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 module.exports = (sequelize) => {
   class User extends Model {}
   User.init({
-    name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -17,18 +17,30 @@ module.exports = (sequelize) => {
         }
       }
     },
-    username: {
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'A name is required'
+        },
+        notEmpty: {
+          msg: 'Please provide a name'
+        }
+      }
+    },
+    emailAddress: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: {
-        msg: 'The username you entered already exists'
+        msg: 'The email you entered already exists'
       },
       validate: {
         notNull: {
-          msg: 'A username is required'
+          msg: 'An email is required'
         },
         notEmpty: {
-          msg: 'Please provide a username'
+          msg: 'Please provide an email'
         }
       }
     },
