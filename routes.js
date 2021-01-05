@@ -9,22 +9,32 @@ const { authenticateUser } = require('./middleware/auth-user');
 const router = express.Router();
 
 // setup a friendly greeting for the root route
-router.get('/', (req, res) => {
+router.get('/',   (req, res) => {
     res.json({
         message: 'Welcome to the REST API project!',
     });
 });
 
+// USERS ROUTES
 // setup a user GET route
-router.get('/api/users', (req,res) => {
+router.get('/api/users', authenticateUser, asyncHandler( async (req,res) => {
+    const user = req.currentUser;
 
-});
+    res.json({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        emailAddress: user.emailAddress
+    });
+
+  //  res.status(200).json({ "message": "Currently authenticated user returned!" });
+}));
 
 // setup a user POST route
 router.post('/api/users', (req,res) => {
 
 });
 
+// COURSES ROUTES
 // setup a course GET route that returns all courses including the User that owns each course and a 200 HTTP status code
 router.get('/api/courses', (req, res) => {
 
@@ -56,3 +66,5 @@ router.use((req, res) => {
         message: 'Route Not Found',
     });
 });
+
+module.exports = router;

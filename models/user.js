@@ -60,21 +60,6 @@ module.exports = (sequelize) => {
         }
       }
     },
-    confirmedPassword: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      set(val) {
-        if ( val === this.password ) {
-          const hashedPassword = bcrypt.hashSync(val, 10);
-          this.setDataValue('confirmedPassword', hashedPassword);
-        }
-      },
-      validate: {
-        notNull: {
-          msg: 'Both passwords must match'
-        }
-      }
-    }
   }, { sequelize });
 
   User.associate = (models) => {
