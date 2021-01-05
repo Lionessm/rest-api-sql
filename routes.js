@@ -25,8 +25,6 @@ router.get('/api/users', authenticateUser, asyncHandler( async (req,res) => {
         lastName: user.lastName,
         emailAddress: user.emailAddress
     });
-
-  //  res.status(200).json({ "message": "Currently authenticated user returned!" });
 }));
 
 // setup a user POST route
@@ -51,7 +49,7 @@ router.get('/api/courses', (req, res) => {
 
 });
 
-// setup a course GET route that returns coresponding course with a 200 HTTP status code
+// setup a course GET route that returns corresponding course with a 200 HTTP status code
 router.post('/api/courses/:id', (req,res) => {
 
 });
