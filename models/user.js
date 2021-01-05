@@ -44,8 +44,8 @@ module.exports = (sequelize) => {
         }
       }
     },
-    password: {
-      type: DataTypes.VIRTUAL,  
+    confirmedPassword: {
+      type: DataTypes.VIRTUAL,
       allowNull: false,
       validate: {
         notNull: {
@@ -58,8 +58,23 @@ module.exports = (sequelize) => {
           args: [8, 20],
           msg: 'The password should be between 8 and 20 characters in length'
         }
-      }
+      },
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      set(val) {
+        if (val === this.confirmedPassword ) {
+          const hashedPassword = bcrypt.hashSync(val, 10);
+          this.setDataValue('password', hashedPassword);
+        }
+      },
+      validate: {
+        notNull: {
+          msg: 'Both passwords must match'
+        }
+      }
+    }
   }, { sequelize });
 
   User.associate = (models) => {
