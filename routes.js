@@ -4,6 +4,7 @@ const express = require('express');
 const { asyncHandler } = require('./middleware/async-handler');
 const { User } = require('./models');
 const { authenticateUser } = require('./middleware/auth-user');
+const { Course } = require('./models');
 
 // Construct a router instance.
 const router = express.Router();
@@ -45,7 +46,25 @@ router.post('/api/users', async (req,res) => {
 
 // COURSES ROUTES
 // setup a course GET route that returns all courses including the User that owns each course and a 200 HTTP status code
-router.get('/api/courses', (req, res) => {
+router.get('/api/courses', async (req, res) => {
+    res.locals.courses = await Course.findAll();
+    const courses = res.locals.courses;
+
+    const processedCourses = [];
+
+    for (const course of courses) {
+        course.user = await User.findByPk(course.id);
+        const username = course.user.emailAddress;
+        console.log('username', username)
+        processedCourses.push({
+            id: course.id,
+            title: course.title,
+            description: course.description,
+            user: username
+        });
+    };
+
+    res.json(processedCourses);
 
 });
 
