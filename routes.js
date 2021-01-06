@@ -93,9 +93,22 @@ router.get('/api/courses/:id', async (req,res) => {
     }});
 });
 
-// setup a course POST route that will create a new course + 201 HTTP status code
-router.post('/api/courses', (req, res) => {
-
+// setup a course POST route that will create a new course
+// set the Location header to the URI for the newly created course, and return a 201 HTTP status code and no content
+router.post('/api/courses', async (req, res) => {
+    try {
+        console.log("req.body", req.body)
+        await Course.create(req.body);
+        res.status(201).json({ "message": "Course successfully created!" });
+        // res.location('/api/courses/' + req.body.id);
+    } catch (error) {
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json({ errors });
+        } else {
+            throw error;
+        }
+    }
 });
 
 // setup a course PUT route that will update course + 204 HTTP status code
