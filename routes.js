@@ -98,9 +98,11 @@ router.get('/api/courses/:id', async (req,res) => {
 router.post('/api/courses', async (req, res) => {
     try {
         console.log("req.body", req.body)
-        await Course.create(req.body);
+        res.locals.course = await Course.create(req.body);
+        const newCourse = res.locals.course;
+        res.location(`/api/courses/${newCourse.id}`);
         res.status(201).json({ "message": "Course successfully created!" });
-        // res.location('/api/courses/' + req.body.id);
+
     } catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => err.message);
