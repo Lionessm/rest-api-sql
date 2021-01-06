@@ -54,13 +54,19 @@ router.get('/api/courses', async (req, res) => {
 
     for (const course of courses) {
         course.user = await User.findByPk(course.id);
-        const username = course.user.emailAddress;
-        console.log('username', username)
+
         processedCourses.push({
             id: course.id,
             title: course.title,
             description: course.description,
-            user: username
+            estimatedTime: course.estimatedTime,
+            userId: course.userId,
+            user: {
+                id: course.user.id,
+                firstName: course.user.firstName,
+                lastName: course.user.lastName,
+               email: course.user.emailAddress,
+            }
         });
     };
 
@@ -69,8 +75,22 @@ router.get('/api/courses', async (req, res) => {
 });
 
 // setup a course GET route that returns corresponding course with a 200 HTTP status code
-router.post('/api/courses/:id', (req,res) => {
-
+router.get('/api/courses/:id', async (req,res) => {
+    res.locals.course = await Course.findByPk(req.params.id);
+    const course = res.locals.course;
+    course.user = await User.findByPk(course.id);
+    res.json({
+        id: course.id,
+        title: course.title,
+        description: course.description,
+        estimatedTime: course.estimatedTime,
+        userId: course.userId,
+        user: {
+        id: course.user.id,
+            firstName: course.user.firstName,
+            lastName: course.user.lastName,
+            email: course.user.emailAddress,
+    }});
 });
 
 // setup a course POST route that will create a new course + 201 HTTP status code
