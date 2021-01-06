@@ -79,7 +79,6 @@ router.get('/api/courses/:id', async (req,res) => {
     res.locals.course = await Course.findByPk(req.params.id);
     const course = res.locals.course;
     course.user = await User.findByPk(course.userId);
-    console.log('course.user ', course.userId);
     res.json({
         id: course.id,
         title: course.title,
@@ -102,7 +101,7 @@ router.post('/api/courses', async (req, res) => {
         res.locals.course = await Course.create(req.body);
         const newCourse = res.locals.course;
         res.location(`/api/courses/${newCourse.id}`);
-        res.status(201).json({ "message": "Course successfully created!" });
+        res.status(201).json("Course successfully created!");
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
@@ -118,8 +117,8 @@ router.post('/api/courses', async (req, res) => {
 router.put('/api/courses/:id', async (req,res) => {
     const course = await Course.findByPk(req.params.id);
     try {
-        console.log("req.body ", req.body);
         await course.update(req.body);
+        res.status(204).json("Course successfully updated!");
     } catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => err.message);
@@ -131,8 +130,14 @@ router.put('/api/courses/:id', async (req,res) => {
 });
 
 // setup a course DELETE route that will delete course + 204 HTTP status code
-router.delete('/api/courses/:id', (req,res) => {
-
+router.delete('/api/courses/:id', async (req,res) => {
+    const course = await Course.findByPk(req.params.id);
+    if (course) {
+        await course.destroy();
+        res.status(204).json("Course successfully deleted!");
+    } else {
+        res.status(404);
+    }
 });
 
 // send 404 if no other route matched
