@@ -46,7 +46,7 @@ router.post('/api/users', async (req,res) => {
 
 // COURSES ROUTES
 // setup a course GET route that returns all courses including the User that owns each course and a 200 HTTP status code
-router.get('/api/courses', async (req, res) => {
+router.get('/api/courses', authenticateUser, async (req, res) => {
     res.locals.courses = await Course.findAll();
     const courses = res.locals.courses;
 
@@ -112,7 +112,7 @@ router.post('/api/courses', async (req, res) => {
 });
 
 // setup a course PUT route that will update course + 204 HTTP status code
-router.put('/api/courses/:id', async (req,res) => {
+router.put('/api/courses/:id', authenticateUser, async (req,res) => {
     const course = await Course.findByPk(req.params.id);
     try {
         await course.update(req.body);
@@ -128,7 +128,7 @@ router.put('/api/courses/:id', async (req,res) => {
 });
 
 // setup a course DELETE route that will delete course + 204 HTTP status code
-router.delete('/api/courses/:id', async (req,res) => {
+router.delete('/api/courses/:id', authenticateUser, async (req,res) => {
     const course = await Course.findByPk(req.params.id);
     if (course) {
         await course.destroy();
