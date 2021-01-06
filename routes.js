@@ -78,7 +78,8 @@ router.get('/api/courses', async (req, res) => {
 router.get('/api/courses/:id', async (req,res) => {
     res.locals.course = await Course.findByPk(req.params.id);
     const course = res.locals.course;
-    course.user = await User.findByPk(course.id);
+    course.user = await User.findByPk(course.userId);
+    console.log('course.user ', course.userId);
     res.json({
         id: course.id,
         title: course.title,
@@ -86,7 +87,7 @@ router.get('/api/courses/:id', async (req,res) => {
         estimatedTime: course.estimatedTime,
         userId: course.userId,
         user: {
-        id: course.user.id,
+            id: course.user.id,
             firstName: course.user.firstName,
             lastName: course.user.lastName,
             email: course.user.emailAddress,
@@ -114,8 +115,19 @@ router.post('/api/courses', async (req, res) => {
 });
 
 // setup a course PUT route that will update course + 204 HTTP status code
-router.put('/api/courses/:id', (req,res) => {
-
+router.put('/api/courses/:id', async (req,res) => {
+    const course = await Course.findByPk(req.params.id);
+    try {
+        console.log("req.body ", req.body);
+        await course.update(req.body);
+    } catch (error) {
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json({ errors });
+        } else {
+            throw error;
+        }
+    }
 });
 
 // setup a course DELETE route that will delete course + 204 HTTP status code
