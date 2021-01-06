@@ -53,7 +53,7 @@ router.get('/api/courses', async (req, res) => {
     const processedCourses = [];
 
     for (const course of courses) {
-        course.user = await User.findByPk(course.id);
+        course.user = await User.findByPk(course.userId);
 
         processedCourses.push({
             id: course.id,
