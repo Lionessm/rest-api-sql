@@ -22,10 +22,10 @@ module.exports = (sequelize) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'A name is required'
+          msg: 'A last name is required'
         },
         notEmpty: {
-          msg: 'Please provide a name'
+          msg: 'Please provide a last name'
         }
       }
     },
@@ -39,11 +39,12 @@ module.exports = (sequelize) => {
         notNull: {
           msg: 'An email is required'
         },
-        notEmpty: {
-          msg: 'Please provide an email'
+        isEmail: {
+          msg: 'Email is not valid. Please provide a valid email.'
         }
       }
     },
+
     confirmedPassword: {
       type: DataTypes.VIRTUAL,
       allowNull: false,
@@ -68,8 +69,9 @@ module.exports = (sequelize) => {
     }
   }, { sequelize });
 
+  // Add associations.
   User.associate = (models) => {
-    // TODO Add associations.
+
     User.hasMany(models.Course, {
       foreignKey: {
         fieldName: 'id',
