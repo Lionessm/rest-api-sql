@@ -47,23 +47,14 @@ module.exports = (sequelize) => {
     confirmedPassword: {
       type: DataTypes.VIRTUAL,
       allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'A password is required'
-        },
-        notEmpty: {
-          msg: 'Please provide a password'
-        },
-        len: {
-          args: [8, 20],
-          msg: 'The password should be between 8 and 20 characters in length'
-        }
-      },
     },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       set(val) {
+        console.log("val", val);
+        console.log("this.confirmedPassword", this.confirmedPassword);
         if (val === this.confirmedPassword ) {
           const hashedPassword = bcrypt.hashSync(val, 10);
           this.setDataValue('password', hashedPassword);

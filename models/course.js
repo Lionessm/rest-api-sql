@@ -11,10 +11,10 @@ module.exports = (sequelize) => {
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'A name is required'
+                    msg: 'A title is required'
                 },
                 notEmpty: {
-                    msg: 'Please provide a name'
+                    msg: 'Please provide a title'
                 }
             }
         },
@@ -36,15 +36,8 @@ module.exports = (sequelize) => {
             unique: {
                 msg: 'The email you entered already exists'
             },
-            validate: {
-                notNull: {
-                    msg: 'An email is required'
-                },
-                notEmpty: {
-                    msg: 'Please provide an email'
-                }
-            }
         },
+        
         materialsNeeded: {
             type: DataTypes.STRING,
             allowNull: false,
