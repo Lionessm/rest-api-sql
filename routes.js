@@ -32,7 +32,16 @@ router.get('/api/users', authenticateUser, asyncHandler( async (req,res) => {
 router.post('/api/users', async (req,res) => {
     try {
         console.log("req.body", req.body)
-        await User.create(req.body);
+
+        const userDetails = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            emailAddress: req.body.emailAddress,
+            confirmedPassword: req.body.password,
+            password: req.body.password
+        };
+
+        await User.create(userDetails);
         res.status(201).json({ "message": "Account successfully created!" });
     } catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
