@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
                 msg: 'The email you entered already exists'
             },
         },
-        
+
         materialsNeeded: {
             type: DataTypes.STRING,
             allowNull: false,
