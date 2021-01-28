@@ -76,7 +76,7 @@ router.get('/api/courses', async (req, res) => {
                email: course.user.emailAddress,
             }
         });
-    };
+    }
 
     res.json(processedCourses);
 
