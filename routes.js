@@ -30,9 +30,8 @@ router.get('/api/users', authenticateUser, asyncHandler( async (req,res) => {
 
 // setup a User POST route
 router.post('/api/users', async (req,res) => {
+    if (!req.body.password) return res.status(400).json({ error: 'Please provide a value for password'});
     try {
-        console.log("req.body", req.body)
-
         const userDetails = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
