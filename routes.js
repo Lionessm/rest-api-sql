@@ -55,7 +55,7 @@ router.post('/api/users', async (req,res) => {
 
 // COURSES ROUTES
 // setup a course GET route that returns all courses including the User that owns each course and a 200 HTTP status code
-router.get('/api/courses', authenticateUser, async (req, res) => {
+router.get('/api/courses', async (req, res) => {
     res.locals.courses = await Course.findAll();
     const courses = res.locals.courses;
 
@@ -104,7 +104,7 @@ router.get('/api/courses/:id', async (req,res) => {
 
 // setup a course POST route that will create a new course
 // set the Location header to the URI for the newly created course, and return a 201 HTTP status code and no content
-router.post('/api/courses', async (req, res) => {
+router.post('/api/courses', authenticateUser, async (req, res) => {
     try {
         res.locals.course = await Course.create(req.body);
         const newCourse = res.locals.course;
