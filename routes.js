@@ -121,6 +121,14 @@ router.post('/api/courses', authenticateUser, async (req, res) => {
 
 // setup a course PUT route that will update course + 204 HTTP status code
 router.put('/api/courses/:id', authenticateUser, async (req,res) => {
+    const errors = [];
+
+    if (!req.body.title) errors.push('Please provide a value for the title');
+
+    if (!req.body.description) errors.push('Please provide a value for the description');
+
+    if (errors.length > 0) res.status(400).json({errors});
+
     const course = await Course.findByPk(req.params.id);
     try {
         await course.update(req.body);
